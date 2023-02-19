@@ -2,7 +2,15 @@
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        chatGrey: {
+          300: "rgb(62, 63, 75)",
+          400: "rgb(52, 53, 65)",
+          700: "rgb(32, 33, 35)",
+        },
+      },
+    },
   },
   plugins: [],
 };

@@ -1,11 +1,17 @@
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
+import Login from "./components/Login";
+import { SessionProvider } from "./components/SessionProvider";
 import SideBar from "./components/SideBar";
 import "./globals.css";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       {/*
@@ -14,15 +20,21 @@ export default function RootLayout({
       */}
       <head />
       <body>
-        <div className="flex">
-          <div className="h-screen max-w-xs overflow-y-auto bg-chatGrey-700 md:min-w-[20rem]">
-            <SideBar />
-          </div>
+        <SessionProvider session={session}>
+          {!session ? (
+            <Login />
+          ) : (
+            <div className="flex">
+              <div className="h-screen max-w-xs overflow-y-auto bg-chatGrey-700 md:min-w-[20rem]">
+                <SideBar />
+              </div>
 
-          {/* ClientProvider - Notification */}
+              {/* ClientProvider - Notification */}
 
-          <div className="flex-1 bg-chatGrey-400">{children}</div>
-        </div>
+              <div className="flex-1 bg-chatGrey-400">{children}</div>
+            </div>
+          )}
+        </SessionProvider>
       </body>
     </html>
   );
